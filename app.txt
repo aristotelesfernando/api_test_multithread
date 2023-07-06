@@ -1,0 +1,28 @@
+from flask import Flask, jsonify
+import threading
+
+app = Flask(__name__)
+
+class NewThreadedTask(threading.Thread):
+     def __init__(self, message):
+         super(NewThreadedTask, self).__init__()
+         self.message = message
+ 
+     def run(self):
+        my_list = [i for i in range(10000000)]
+        total = sum(my_list)
+        print(total)        
+        print(self.message)
+
+@app.route('/')
+def index():
+    new_thread = NewThreadedTask('Threaded task has been completed')
+    new_thread.start()
+    # opcionalmente, aguarda a thread terminar a execução para continuar
+    # new_thread.join()    
+    return jsonify({'name': 'alice','email': 'alice@outlook.com'}), 200
+
+def processa_lista():
+    my_list = [i for i in range(1000000)]
+    total = sum(my_list)  
+    print(total)
